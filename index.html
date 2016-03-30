@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>loading year</title>
+        <link rel="stylesheet" type="text/css" href="loading.css"/>
+    </head>
+    <body>
+        <div class="wrapper">
+            <progress id="progressBar" value="0" max="100">0</progress>
+            <div><div class="percentage_value" id="percentageValue">0%</div> of current year loaded</div>
+            <div class="center current_time"><div class="value" id="currentTimeValue">0</div></div>
+            <div class="time_left">
+                <div class="left">
+                    <div class="value" id="secondsValue">0</div>
+                    <div class="value" id="minutesValue">0</div>
+                    <div class="value" id="hoursValue">0</div>
+                    <div class="value" id="daysValue">0</div>
+                </div>            
+                <div class="right">
+                    <div class="label">seconds left</div>
+                    <div class="label">minutes left</div>
+                    <div class="label">hours left</div>
+                    <div class="label">days left</div>
+                </div>
+            </div>
+            
+
+        </div>
+        <script type="text/javascript" src="loading.js"></script>
+    </body>
+</html>
