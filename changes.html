@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loading Year</title>
+    <style>
+        body {
+            background: #0081EA;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            color: #FFFFFF;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .wrapper {
+            width: 100%;
+            max-width: 600px;
+            background: #03457B;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
+        }
+
+        progress {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 15px;
+            border-radius: 10px;
+            background: #EEF0F3;
+        }
+
+        progress::-webkit-progress-bar {
+            background: #03457B;
+        }
+
+        progress::-webkit-progress-value {
+            background-color: #EEF0F3;
+        }
+
+        progress::-moz-progress-bar {
+            background-color: #EEF0F3;
+        }
+
+        .center {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .percentage_value, .value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #EEF0F3;
+        }
+
+        .current_time .value {
+            margin-top: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .time_left {
+            margin-top: 2rem;
+        }
+
+        table {
+            width: 100%;
+            text-align: center;
+            border-spacing: 10px;
+        }
+
+        th, td {
+            padding: 10px;
+            background: #0081EA;
+            border-radius: 8px;
+        }
+
+        .value {
+            font-size: 1.5rem;
+        }
+
+        .label {
+            font-size: 1.2rem;
+            color: #EEF0F3;
+        }
+
+        /* Card styling */
+        .card {
+            background: #03457B;
+            padding: 1rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 1rem;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="wrapper">
+    <progress id="progressBar" value="0" max="100">0</progress>
+    <div class="center">
+        <div class="percentage_value" id="percentageValue">0%</div>
+        of the current year loaded
+    </div>
+
+    <div class="card center current_time">
+        <div class="value" id="currentTimeValue">0</div>
+    </div>
+
+    <div class="card time_left">
+        <table>
+            <tr>
+                <td>
+                    <div class="value" id="secondsValue">0</div>
+                    <div class="label">seconds left</div>
+                </td>
+                <td>
+                    <div class="value" id="minutesValue">0</div>
+                    <div class="label">minutes left</div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="value" id="hoursValue">0</div>
+                    <div class="label">hours left</div>
+                </td>
+                <td>
+                    <div class="value" id="daysValue">0</div>
+                    <div class="label">days left</div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<script>
+    (function () { 
+        var progressBarElement = document.getElementById("progressBar");
+        var percentageValueElement = document.getElementById("percentageValue");
+        var currentTimeValueElement = document.getElementById("currentTimeValue");
+        var secondsValueElement = document.getElementById("secondsValue");
+        var minutesValueElement = document.getElementById("minutesValue");
+        var hoursValueElement = document.getElementById("hoursValue");
+        var daysValueElement = document.getElementById("daysValue");
+        var maxP = 1000; 
+
+        function calculateValue(a) {
+            var now = new Date();
+            var year = now.getFullYear();
+            var nowM = now.getTime();
+            var firstDayM = new Date(year, 0, 1).getTime();
+            var lastDayM = new Date(year, 11, 31, 23, 59, 59).getTime();
+            var totalInYear = lastDayM - firstDayM;
+            var passedInYear = nowM - firstDayM;
+            var leftInYear = lastDayM - nowM;
+            var valueP = passedInYear * maxP / totalInYear;
+            var valuePRounded = (Math.floor(valueP * 10)) / 100;
+            var seconds = Math.floor(leftInYear / 1000);
+            var minutes = Math.floor(leftInYear / 1000 / 60);
+            var hours = Math.floor(leftInYear / 1000 / 60 / 60);
+            var days = Math.floor(leftInYear / 1000 / 60 / 60 / 24);
+
+            switch (a) {
+                case "now": return now;
+                case "valueP": return valueP;
+                case "valuePRounded": return valuePRounded;
+                case "seconds": return seconds;
+                case "minutes": return minutes;
+                case "hours": return hours;
+                case "days": return days;
+                default: return "default";
+            }
+        }
+
+        function setValues() {
+            var valueP = calculateValue("valueP");
+            var valuePRounded = calculateValue("valuePRounded");
+
+            progressBarElement.setAttribute("max", maxP);
+            progressBarElement.setAttribute("value", valueP);
+            percentageValueElement.innerHTML = valuePRounded + " %";
+            currentTimeValueElement.innerHTML = calculateValue("now").toLocaleString();
+            secondsValueElement.innerHTML = calculateValue("seconds");
+            minutesValueElement.innerHTML = calculateValue("minutes");
+            hoursValueElement.innerHTML = calculateValue("hours");
+            daysValueElement.innerHTML = calculateValue("days");
+        }
+
+        setValues();
+        setInterval(setValues, 1000);
+    })();
+</script>
+
+</body>
+</html>
